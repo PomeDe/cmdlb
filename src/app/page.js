@@ -1,6 +1,6 @@
 "use client"
 
-import Image from "next/image"
+import lang from "@/components/Header"
 import Link from "next/link"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
@@ -50,11 +50,12 @@ const past= [
 
 
 export default function Home() {
-  const [active, setActive] = useState(1)
+  const [active, setActive] = useState(1);
+        const [lang, setLang]= useState(true);
 
   return (
-    <div className="flex flex-col items-center justify-center  font-sans dark:bg-black">
-      <Header />
+    <div id="header" className=" flex flex-col items-center justify-center  font-sans bg-black text-white">
+      <Header lang={lang} setLang={setLang}/>
       <div className="flex h-170 w-full items-center justify-center">
         {images.map((img, index) => {
           const isCenter = index === active
@@ -80,7 +81,7 @@ export default function Home() {
                 damping: 28,
               }}
             >
-              <div className="h-100 w-84 overflow-hidden rounded-xl shadow-xl ">
+              <div  className="h-100 w-84 overflow-hidden rounded-xl shadow-xl ">
                 <img
                   src={img.src}
                   className="h-full w-full object-cover"
@@ -90,8 +91,8 @@ export default function Home() {
           )
         })}
       </div>
-      <div className="flex flex-col  items-center text-left justify-center text-4xl font-semibold w-2/3 space-y-15 mb-10">
-        <p className="w-full">Past Shows</p>
+      <div id="past-shows" className="flex flex-col scroll-mt-32 items-center text-left justify-center text-4xl font-semibold w-2/3 space-y-15 mb-10">
+        {(lang)?<p className="w-full">Past Shows</p> : <p className="w-full">Дууссан Эвэнтүүд</p>}
         <div className="grid grid-cols-3 gap-20 w-full  ">
           {past.map((im) => (
             <Link href="/" key={im.id} className="h-100 w-84 overflow-hidden rounded-xl shadow-xl">
@@ -105,7 +106,7 @@ export default function Home() {
         </div>
 
       </div>
-      <Footer />
+      <Footer lang={lang} />
     </div>
   )
 }
