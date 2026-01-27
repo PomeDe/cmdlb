@@ -1,11 +1,11 @@
 "use client"
 
-import lang from "@/components/Header"
 import Link from "next/link"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import { motion } from "framer-motion"
 import { useState } from "react"
+import { useAuth } from "@/context/AuthContext"
 
 const images = [
   {
@@ -52,10 +52,10 @@ const past= [
 export default function Home() {
   const [active, setActive] = useState(1);
   const [lang, setLang]= useState(true);
-const [logged, setLogged] = useState(false)
+  const { logged } = useAuth()
 
   return (
-    <div className=" flex flex-col items-center justify-center  font-sans bg-black text-white">
+    <div className=" flex flex-col items-center justify-center bg-black font-sans bg-black text-white">
       <Header lang={lang} setLang={setLang} logged={logged}/>
       <div id="header" className="scroll-mt-36 flex h-170 w-full items-center justify-center">
         {images.map((img, index) => {

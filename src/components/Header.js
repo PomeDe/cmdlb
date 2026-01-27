@@ -4,11 +4,11 @@ import Link from "next/link"
 export default function Header({ lang, setLang, logged}) {
     return (
 
-        <header className="flex flex-row justify-evenly items-center p-6 sticky space-x-50 bg-black  w-full top-0 z-15 h-30">
+        <header className="flex flex-row justify-evenly items-center p-6 sticky space-x-50  bg-black w-full top-0 z-15 h-20">
 
-            <div className="flex flex-row items-center space-x-5">
+            <div className="flex flex-row items-center space-x-8">
                 <a href="/">
-                    <img src="logo.png" className="w-25" />
+                    <img src="logo.png" className="w-20" />
                 </a>
                 {(lang) ? <ul className="flex space-x-6 text-xl">
                     <li><Link href="#header" className="hover:text-gray-800 transition duration-300 ease-in-out">Featured</Link></li>
@@ -20,17 +20,17 @@ export default function Header({ lang, setLang, logged}) {
                     <li><Link href="/" className="hover:text-gray-800 transition duration-300 ease-in-out">Бидний тухай</Link></li>
                 </ul>}
             </div>
-            <div className='flex flex-row items-center space-x-10 '>
+            <div className='flex flex-row items-center space-x-12 '>
                 {logged ?
-                    (lang ?
-                        <Link href="/" className='hover:text-black hover:cursor-pointer transition duration-300 ease-in-out  outline-2 rounded-4xl w-50 h-12 text-xl text-white items-center justify-center flex flex-row '>
-                            <img src='' />
-                            <p>Cart</p>
-                        </Link> :
-                        <Link href="/" className='hover:text-black hover:cursor-pointer transition duration-300 ease-in-out  outline-2 rounded-4xl w-58 h-12 text-xl text-white items-center justify-center flex flex-row '>
-                            <img src='' />
-                            <p>Сагс</p>
-                        </Link>) :
+                    (
+                        <Link href="/" className='hover:text-gray-800 hover:cursor-pointer transition duration-300 ease-in-out  outline-2 rounded-4xl w-50 h-12 text-xl text-white items-center  group relative justify-center flex flex-row space-x-2'>
+                                                <div className='group relative '>
+                        <img src="https://uxwing.com/wp-content/themes/uxwing/download/e-commerce-currency-shopping/shopping-basket-white-icon.png" className="w-9" />
+                        <img src="basket-icon.png" className="absolute inset-0 w-40 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out" />
+                    </div>
+                        {(lang?( <p>Cart</p>):( <p>Сагс</p>))  }
+                        </Link> ):
+
                     (lang ?
                         <Link href="/Login" className='hover:text-black hover:cursor-pointer transition duration-300 ease-in-out  outline-2 rounded-4xl w-50 h-12 text-xl text-white items-center justify-center flex flex-row '>
                             <p>Login / Sign Up</p>

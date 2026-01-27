@@ -5,10 +5,12 @@ import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useAuth } from "@/context/AuthContext"
 
 export default function Home() {
   const [lang, setLang] = useState(true)
   const router = useRouter()
+    const { setLogged } = useAuth()
 
   return (
     <div className="flex flex-col items-center justify-center font-sans bg-black text-white">
@@ -26,6 +28,7 @@ export default function Home() {
             className="w-full flex flex-col h-100 justify-evenly items-center"
             onSubmit={(e) => {
               e.preventDefault()
+                setLogged(true)
               router.push("/")
             }}
           >
