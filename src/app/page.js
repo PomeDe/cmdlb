@@ -51,12 +51,13 @@ const past= [
 
 export default function Home() {
   const [active, setActive] = useState(1);
-        const [lang, setLang]= useState(true);
+  const [lang, setLang]= useState(true);
+const [logged, setLogged] = useState(false)
 
   return (
-    <div id="header" className=" flex flex-col items-center justify-center  font-sans bg-black text-white">
-      <Header lang={lang} setLang={setLang}/>
-      <div className="flex h-170 w-full items-center justify-center">
+    <div className=" flex flex-col items-center justify-center  font-sans bg-black text-white">
+      <Header lang={lang} setLang={setLang} logged={logged}/>
+      <div id="header" className="scroll-mt-36 flex h-170 w-full items-center justify-center">
         {images.map((img, index) => {
           const isCenter = index === active
           const isLeft =
