@@ -44,7 +44,8 @@ const past= [
 export default function Home() {
   const [active, setActive] = useState(1);
   const [lang, setLang]= useState(true);
-  const { logged } = useAuth()
+  const { logged } = useAuth();
+
 
   return (
     <div className=" flex flex-col items-center justify-center bg-black font-sans  text-white">
@@ -74,28 +75,32 @@ export default function Home() {
                 damping: 28,
               }}
             >
-              <div  className="h-100 w-84 overflow-hidden rounded-xl shadow-xl ">
+              {active == img.id ? (              <div onClick={()=> window.location.href = `/ticket/${img.id}`} className="h-100 w-84 overflow-hidden rounded-xl shadow-xl ">
                 <img
                   src={img.src}
                   className="h-full w-full object-cover"
                 />
-              </div>
+              </div>) :(              <div  className="h-100 w-84 overflow-hidden rounded-xl shadow-xl ">
+                <img
+                  src={img.src}
+                  className="h-full w-full object-cover"
+                />
+              </div>)}
+
             </motion.div>
           )
         })}
       </div>
       <div id="past-shows" className="flex flex-col scroll-mt-32 items-center text-left justify-center text-4xl font-semibold w-2/3 space-y-15 mb-10">
-        {(lang)?<p className="w-full">Upcoming Shows</p> : <p className="w-full">Дууссан Эвэнтүүд</p>}
-        <div className="grid grid-cols-2 gap-20 w-full  ">
+        {(lang)?<p className="w-full">Past Shows</p> : <p className="w-full">Дууссан Эвэнтүүд</p>}
+        <div className="grid grid-cols-3 gap-20 w-full  ">
           {past.map((im) => (
-            <Link href="/" key={im.id} className="h-80 w-170 overflow-hidden shadow-xl flex flex-col justify-center items-start space-y-5">
-              <p>{im.id}</p>
-              <div className="h-65 w-150 rounded-xl flex justify-end items-start p-3" style={{ backgroundImage: `url(${im.src})`, backgroundSize: "cover", backgroundPosition: "center" }}>
-                <div className="h-18 w-18 bg-white rounded-2xl text-xl text-black flex flex-col justify-center items-center">
-                  <p>FEB 3</p>
-                  <p>18:00</p>
-                </div>
-              </div>
+            <Link href="/" key={im.id} className="h-100 w-84 overflow-hidden rounded-xl shadow-xl">
+              <img
+              
+                src={im.src}
+                className="h-full w-full object-cover"
+              />
             </Link>
 ))}
         </div>
