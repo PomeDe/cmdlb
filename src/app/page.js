@@ -38,21 +38,14 @@ const past= [
     id: 3,
     src: "0.jpg",
   },
-  {
-    id: 4,
-    src: "1.jpg",
-  },
-  {
-    id: 5,
-    src: "2.jpg",
-  },
 ]
 
 
 export default function Home() {
   const [active, setActive] = useState(1);
   const [lang, setLang]= useState(true);
-  const { logged } = useAuth()
+  const { logged } = useAuth();
+
 
   return (
     <div className=" flex flex-col items-center justify-center bg-black font-sans bg-black text-white">
@@ -82,26 +75,28 @@ export default function Home() {
                 damping: 28,
               }}
             >
-              <div  className="h-100 w-84 overflow-hidden rounded-xl shadow-xl ">
+              {active == img.id ? (              <div onClick={()=> window.location.href = `/ticket/${img.id}`} className="h-100 w-84 overflow-hidden rounded-xl shadow-xl ">
                 <img
                   src={img.src}
                   className="h-full w-full object-cover"
                 />
-              </div>
+              </div>) :(              <div  className="h-100 w-84 overflow-hidden rounded-xl shadow-xl ">
+                <img
+                  src={img.src}
+                  className="h-full w-full object-cover"
+                />
+              </div>)}
+
             </motion.div>
           )
         })}
       </div>
       <div id="past-shows" className="flex flex-col scroll-mt-32 items-center text-left justify-center text-4xl font-semibold w-2/3 space-y-15 mb-10">
         {(lang)?<p className="w-full">Past Shows</p> : <p className="w-full">Дууссан Эвэнтүүд</p>}
-        <div className="grid grid-cols-3 gap-20 w-full  ">
+        <div className="grid grid-cols-2 gap-40 w-full">
           {past.map((im) => (
-            <Link href="/" key={im.id} className="h-100 w-84 overflow-hidden rounded-xl shadow-xl">
-              <img
-              
-                src={im.src}
-                className="h-full w-full object-cover"
-              />
+            <Link href={`/ticket/${im.id}`} key={im.id} className="h-80 w-150 justify-end flex overflow-hidden rounded-xl shadow-xl" style={{backgroundImage: `url(${im.src})`, backgroundPosition: "center", backgroundSize:"cover"}}>
+              <div className="h-20 w-20 bg-gray-100 flex flex-col items-center justify-center rounded-xl mr-2 mt-2 text-black text-lg"><p>Feb 3</p><p>18:00</p> </div>
             </Link>
           ))}
         </div>
