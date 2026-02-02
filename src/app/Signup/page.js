@@ -71,7 +71,7 @@ export default function Home() {
 
             <button
               type="submit"
-              className="w-2/3 bg-gradient-to-b from-red-900 to-red-500 flex justify-center items-center h-16 rounded-xl text-2xl"
+              className="w-2/3 bg-linear-to-b from-red-900 to-red-500 flex justify-center items-center h-16 rounded-xl text-2xl"
             >
               {lang ? "Sign Up" : "Бүртгүүлэх"}
             </button>
