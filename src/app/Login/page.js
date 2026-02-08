@@ -29,7 +29,7 @@ export default function Home() {
             onSubmit={(e) => {
               e.preventDefault()
                 setLogged(true)
-              router.push("/")
+              router.back()
             }}
           >
             <div className="flex flex-col items-start text-xl w-2/3">
