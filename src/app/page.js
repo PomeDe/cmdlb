@@ -64,7 +64,7 @@ const upcomingShows = shows.filter(show => show.type === "upcoming");
       </div>
       <div id="past-shows" className="flex flex-col scroll-mt-32 items-center text-left justify-center text-4xl font-semibold w-2/3 space-y-15 mb-10">
         {(lang)?<p className="w-full">Upcoming Shows</p> : <p className="w-full">Дууссан Эвэнтүүд</p>}
-        <div className="grid grid-cols-2 gap-20 w-full  ">
+        <div className="grid grid-cols-2 gap-30 w-full  ">
           {upcomingShows.map((im) => (
             <Link href={`/ticket/${im.id}`} key={im.id} className="h-80 w-170 overflow-hidden shadow-xl flex flex-col justify-center items-start space-y-5">
               <p>{im.name}</p>

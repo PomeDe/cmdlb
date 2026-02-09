@@ -80,10 +80,9 @@ export default function Home() {
   return (
     <div className=" flex flex-col items-center justify-center bg-black font-sans  text-white">
        <Header lang={lang} setLang={setLang} logged={logged} />
-       <div className='overflow-hidden  flex flex-col h-220 w-full items-center justify-start mt-25'>
+       <div className='overflow-hidden  flex flex-col h-180 mb-56 w-2/3 items-center justify-center bg-slate-700 rounded-2xl'>
 <h1 className="text-3xl font-bold mb-8">Seat Selection</h1>
 
-      {/* Seating */}
       <div className="mb-8">
         {ROWS.map((row) => (
           <div key={row} className="flex items-center gap-2 mb-3">
@@ -97,7 +96,7 @@ export default function Home() {
                     key={seat.id}
                     onClick={() => handleSeatClick(seat.id)}
                     disabled={seat.status === 'taken'}
-                    className={`w-8 h-8 rounded ${getSeatColor(seat.status)}`}
+                    className={`w-10 h-10 rounded ${getSeatColor(seat.status)}`}
                     title={seat.id}
                   >
                     <span className="text-xs">{seat.number}</span>
@@ -108,8 +107,7 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Summary */}
-      <div className="bg-white text-black rounded-lg p-6 w-full max-w-md">
+      <div className="bg-white text-black rounded-lg ml-9 p-6 w-2/5">
         <p className="mb-2">
           <strong>Selected Seats:</strong>{' '}
           {selectedSeats.length
@@ -130,7 +128,7 @@ export default function Home() {
               : 'bg-gray-300 text-gray-500 cursor-not-allowed'
           }`}
         >
-          Add to Cart
+          Checkout
         </button>
       </div>
        </div>
