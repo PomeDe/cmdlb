@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext"
 import shows from "@/data/shows.json"
 
-const tickets = shows.filter(show => show.type === "upcoming");
+const tickets = shows;
 
 
 export default function Home() {
@@ -74,7 +74,11 @@ export default function Home() {
                 </div>
 
                 <button
-                  onClick={() => { logged ? (window.location.href = "/seating") : (window.location.href = "/Login") }}
+onClick={() => {
+  logged
+    ? (window.location.href = `/seating/${ticket.id}`)
+    : (window.location.href = "/Login")
+}}
                   className="w-full h-20 bg-linear-to-b from-red-900 to-red-500 rounded-xl text-2xl"
                 >
                   Choose Seat

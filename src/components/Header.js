@@ -2,8 +2,8 @@ import React from 'react'
 import Link from "next/link"
 import { useAuth } from "@/context/AuthContext"
 
-export default function Header({ lang, setLang, logged }) {
-    const { setLogged } = useAuth();
+export default function Header({ lang, setLang, logged, setShowHistory }) {
+    const { setLogged, user } = useAuth();
     return (
 
         <header className="flex flex-row justify-evenly items-center p-6 sticky space-x-50 bg-black  w-full top-0 z-15 h-30">
@@ -25,13 +25,14 @@ export default function Header({ lang, setLang, logged }) {
                 {logged ?
                     (
                         <div className='flex flex-row space-x-10'>
-                            <Link href="/" className='hover:text-gray-800 hover:cursor-pointer transition duration-300 ease-in-out  outline-2 rounded-4xl w-50 h-12 text-xl text-white items-center  group relative justify-center flex flex-row space-x-2 bg-linear-30 from-gray-500 to-blue-800 '>
+                            <p>Hello, {user}!</p>
+                            <button   onClick={() => setShowHistory(true)} className='hover:text-gray-800 hover:cursor-pointer transition duration-300 ease-in-out  outline-2 rounded-4xl w-50 h-12 text-xl text-white items-center  group relative justify-center flex flex-row space-x-2 bg-linear-30 from-gray-500 to-blue-800 '>
                                 <div className='group relative '>
                                     <img src="/hstr.png" className="w-9" />
                                     <img src="/hstrr.png" className="absolute inset-0 w-40 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out" />
                                 </div>
                                 {(lang ? (<p>History</p>) : (<p>Хуулга</p>))}
-                            </Link>
+                            </button>
                             <button
                                 onClick={() => {
                                     setLogged(false);

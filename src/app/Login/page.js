@@ -10,7 +10,8 @@ import { useAuth } from "@/context/AuthContext"
 export default function Home() {
   const [lang, setLang] = useState(true)
   const router = useRouter()
-    const { setLogged } = useAuth()
+    const { setLogged,setUser } = useAuth()
+  const [email, setEmail] = useState("")
 
   return (
     <div className="flex flex-col items-center justify-center font-sans bg-black text-white">
@@ -29,6 +30,7 @@ export default function Home() {
             onSubmit={(e) => {
               e.preventDefault()
                 setLogged(true)
+                setUser(email)
               router.back()
             }}
           >
@@ -36,8 +38,10 @@ export default function Home() {
               <p className="text-2xl">{lang ? "Email *" : "Имэйл *"}</p>
               <input
                 type="email"
+                id="email"
                 required
                 className="bg-white w-full h-14 rounded-xl text-black"
+                onChange={(e) =>(setEmail(e.target.value))}
               />
             </div>
 
