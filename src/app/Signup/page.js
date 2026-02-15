@@ -5,10 +5,14 @@ import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useAuth } from "@/context/AuthContext"
 
 export default function Home() {
   const [lang, setLang] = useState(true)
   const router = useRouter()
+    const { setLogged,setUser,setEmail } = useAuth()
+  const [email, setEmai] = useState("")
+  const [name, setName] = useState("")
 
   return (
     <div className="flex flex-col items-center justify-center font-sans bg-black text-white">
@@ -26,6 +30,9 @@ export default function Home() {
             className="w-full flex flex-col h-160 justify-evenly items-center"
             onSubmit={(e) => {
               e.preventDefault()
+                setLogged(true)
+                setEmail(email)
+                setUser(name)
               router.push("/") 
             }}
           >
@@ -35,6 +42,7 @@ export default function Home() {
                 type="email"
                 required
                 className="bg-white w-full h-14 rounded-xl text-black"
+                                onChange={(e) =>(setEmai(e.target.value))}
               />
             </div>
 
@@ -44,6 +52,7 @@ export default function Home() {
                 type="text"
                 required
                 className="bg-white w-full h-14 rounded-xl text-black"
+                                                onChange={(e) =>(setName(e.target.value))}
               />
             </div>
 

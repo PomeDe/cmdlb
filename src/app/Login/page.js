@@ -10,8 +10,8 @@ import { useAuth } from "@/context/AuthContext"
 export default function Home() {
   const [lang, setLang] = useState(true)
   const router = useRouter()
-    const { setLogged,setUser } = useAuth()
-  const [email, setEmail] = useState("")
+    const { setLogged,setEmail } = useAuth()
+  const [email, setEmai] = useState("")
 
   return (
     <div className="flex flex-col items-center justify-center font-sans bg-black text-white">
@@ -30,7 +30,7 @@ export default function Home() {
             onSubmit={(e) => {
               e.preventDefault()
                 setLogged(true)
-                setUser(email)
+                setEmail(email)
               router.back()
             }}
           >
@@ -41,7 +41,7 @@ export default function Home() {
                 id="email"
                 required
                 className="bg-white w-full h-14 rounded-xl text-black"
-                onChange={(e) =>(setEmail(e.target.value))}
+                onChange={(e) =>(setEmai(e.target.value))}
               />
             </div>
 

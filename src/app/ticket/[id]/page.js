@@ -6,9 +6,7 @@ import { useParams } from "next/navigation";
 import Footer from "@/components/Footer"
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext"
-import shows from "@/data/shows.json"
-
-const tickets = shows;
+import showsData from "@/data/shows.json"
 
 
 export default function Home() {
@@ -16,10 +14,23 @@ export default function Home() {
   const { id } = useParams();
   const { logged } = useAuth();
   const [ticket, setTicket] = useState(null);
-  useEffect(() => {
-    const selectedTicket = tickets.find(p => p.id === Number(id));
-    setTicket(selectedTicket);
-  }, [id]);
+
+    const [allShows, setAllShows] = useState([])
+
+useEffect(() => {
+  const adminShows = JSON.parse(localStorage.getItem("admin_shows")) || []
+  setAllShows([...showsData, ...adminShows])
+}, [])
+useEffect(() => {
+  if (!allShows.length) return;
+
+  const selectedTicket = allShows.find(
+    (p) => p.id === Number(id)
+  );
+
+  setTicket(selectedTicket || null);
+}, [id, allShows]);
+
 
 
   return (

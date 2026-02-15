@@ -6,25 +6,31 @@ import Footer from "@/components/Footer"
 import { motion } from "framer-motion"
 import { useState,useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
-import shows from "@/data/shows.json"
+import showsData from "@/data/shows.json"
 import { getTickets } from "@/components/ticketStorage";
-
 
 export default function Home() {
 
   const [active, setActive] = useState(1);
   const [lang, setLang]= useState(true);
-  const { logged,user } = useAuth();
+  const { logged,email } = useAuth();
 const [showHistory, setShowHistory] = useState(false)
 const [tickets, setTickets] = useState([])
-useEffect(() => {
-  if (!user) return; // prevent errors if no one is logged in
+const [allShows, setAllShows] = useState([])
 
-  const userTickets = getTickets(user); 
+
+useEffect(() => {
+  const adminShows = JSON.parse(localStorage.getItem("admin_shows")) || []
+  setAllShows([...showsData, ...adminShows])
+}, [])
+useEffect(() => {
+  if (!email) return; // prevent errors if no one is logged in
+
+  const userTickets = getTickets(email); 
   setTickets(userTickets);
-}, [user, showHistory]);
-const featuredShows = shows.filter(show => show.type === "featured");
-const upcomingShows = shows.filter(show => show.type === "upcoming");
+}, [email, showHistory]);
+const featuredShows = allShows.filter(show => show.type === "featured");
+const upcomingShows = allShows.filter(show => show.type === "upcoming");
 
   return (
     <div className=" flex flex-col items-center justify-center bg-black font-sans  text-white">
@@ -46,9 +52,9 @@ const upcomingShows = shows.filter(show => show.type === "upcoming");
               className="absolute cursor-pointer"
               animate={{
                 x: isCenter ? 0 : isLeft ? -650 : 650,
-                scale: isCenter ? 1.5 : 1,
+                scale: isCenter ? 1.5 : 0.8,
                 opacity: isCenter || isLeft || isRight ? 1 : 0,
-                zIndex: isCenter ? 5 : 3,
+                zIndex: isCenter ? 8: 5,
               }}
               transition={{
                 type: "spring",
@@ -56,12 +62,12 @@ const upcomingShows = shows.filter(show => show.type === "upcoming");
                 damping: 28,
               }}
             >
-              {active == img.id ? (              <div onClick={()=> window.location.href = `/ticket/${img.id}`} className="h-100 w-84 overflow-hidden rounded-xl shadow-xl ">
+              {active == img.id ? (              <div onClick={()=> window.location.href = `/ticket/${img.id}`} className="h-70 w-130 overflow-hidden rounded-xl shadow-xl ">
                 <img
                   src={img.src}
                   className="h-full w-full object-cover"
                 />
-              </div>) :(              <div  className="h-100 w-84 overflow-hidden rounded-xl shadow-xl ">
+              </div>) :(              <div  className="h-80 w-130 overflow-hidden rounded-xl shadow-xl ">
                 <img
                   src={img.src}
                   className="h-full w-full object-cover"

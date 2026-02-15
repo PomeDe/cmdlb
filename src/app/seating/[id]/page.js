@@ -5,12 +5,12 @@ import Footer from "@/components/Footer";
 import { useAuth } from "@/context/AuthContext";
 import { saveTicket } from "@/components/ticketStorage";
 import { useState, useEffect } from 'react';
-import { useParams } from "next/navigation";
-import shows from "@/data/shows.json";
+import { useParams,useRouter } from "next/navigation";
+import showsData from "@/data/shows.json";
+
 
 const ROWS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 const SEATS_PER_ROW = 12;
-
 const TAKEN_SEATS = new Set([
   'C5', 'C6',
   'D7', 'D8',
@@ -39,20 +39,32 @@ function generateSeats() {
 export default function Home() {
   const { id } = useParams();
   const [lang, setLang] = useState(true);
-  const { logged,user } = useAuth();
+  const { logged,email } = useAuth();
+  const router = useRouter();
 
   const [show, setShow] = useState(null);
   const [seats, setSeats] = useState(generateSeats());
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [showPayment, setShowPayment] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState('qpay');
+  const [allShows, setAllShows] = useState([])
+
+useEffect(() => {
+  const adminShows = JSON.parse(localStorage.getItem("admin_shows")) || []
+  setAllShows([...showsData, ...adminShows])
+}, [])
 
   const pricePerSeat = 15000;
 
-  useEffect(() => {
-    const selectedShow = shows.find(s => s.id === Number(id));
-    setShow(selectedShow);
-  }, [id]);
+useEffect(() => {
+  if (!allShows.length) return;
+
+  const selectedShow = allShows.find(
+    s => s.id === Number(id)
+  );
+
+  setShow(selectedShow || null);
+}, [id, allShows]);
 
   const handleSeatClick = (seatId) => {
     const seat = seats.find((s) => s.id === seatId);
@@ -88,7 +100,7 @@ export default function Home() {
   };
 
   const handleCompletion = () => {
-    if (!show || !user) return;
+    if (!show || !email) return;
 
     const ticketData = {
       id: show.id,
@@ -101,8 +113,8 @@ export default function Home() {
     };
 
     // Save ticket by email
-    saveTicket(ticketData, user);
-    window.location.href = "/";
+    saveTicket(ticketData, email);
+    router.push("/");
   };
 
 

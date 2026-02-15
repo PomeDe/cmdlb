@@ -6,13 +6,15 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [logged, setLogged] = useState(false);
-  const [user, setUser] = useState("");
+  const [email, setEmail] = useState("");
+   const [user, setUser] = useState("");
 
     useEffect(() => {
     const storedAuth = localStorage.getItem("auth");
     if (storedAuth) {
       const parsed = JSON.parse(storedAuth);
       setLogged(parsed.logged === true);
+            setEmail(parsed.email || "");
             setUser(parsed.user || "");
     }
   }, []);
@@ -20,12 +22,12 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     localStorage.setItem(
       "auth",
-      JSON.stringify({ logged, user })
+      JSON.stringify({ logged, email,user })
     );
   }, [logged,user]);
 
   return (
-    <AuthContext.Provider value={{ logged, setLogged,user,setUser }}>
+    <AuthContext.Provider value={{ logged, setLogged,user,setUser, email, setEmail}}>
       {children}
     </AuthContext.Provider>
   );
