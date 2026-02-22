@@ -1,85 +1,60 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import showsData from "@/data/shows.json"
 
-export default function AdminPage() {
-  const [name, setName] = useState("")
-  const [date, setDate] = useState("")
-  const [time, setTime] = useState("")
-  const [image, setImage] = useState("")
-  const [type, setType] = useState("upcoming")
-  const handleAddShow = () => {
+export default function Dashboard() {
+  const [stats, setStats] = useState({
+    totalShows: 0,
+    featured: 0,
+    upcoming: 0,
+    totalTickets: 0
+  })
 
-    const existing = JSON.parse(localStorage.getItem("admin_shows")) || []
-        const newShow = {
-      id: Math.random(),
-      name,
-      date,
-      time,
-      src: image,
-      type
-    }
-    const updated = [...existing, newShow]
+  useEffect(() => {
+    const adminShows = JSON.parse(localStorage.getItem("admin_shows")) || []
+    const allShows = [...showsData, ...adminShows]
 
-    localStorage.setItem("admin_shows", JSON.stringify(updated))
+    let totalTickets = 0
 
-    alert("Show Added!")
+    const users = Object.keys(localStorage)
+      .filter(key => key.startsWith("tickets_"))
 
-    setName("")
-    setDate("")
-    setTime("")
-    setImage("")
-  }
+    users.forEach(userKey => {
+      const tickets = JSON.parse(localStorage.getItem(userKey)) || []
+      totalTickets += tickets.length
+    })
+
+    setStats({
+      totalShows: allShows.length,
+      featured: allShows.filter(s => s.type === "featured").length,
+      upcoming: allShows.filter(s => s.type === "upcoming").length,
+      totalTickets
+    })
+
+  }, [])
 
   return (
-    <div className="min-h-screen bg-black text-white p-10">
-      <h1 className="text-3xl mb-6">Admin Panel</h1>
+    <div>
+      <h1 className="text-3xl font-bold mb-10">Dashboard</h1>
 
-      <div className="flex flex-col space-y-4 w-96">
-        <input
-          placeholder="Show Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="p-2 "
-        />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-        <input
-          placeholder="Date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          className="p-2 "
-        />
+        <StatCard title="Total Shows" value={stats.totalShows} />
+        <StatCard title="Featured Shows" value={stats.featured} />
+        <StatCard title="Upcoming Shows" value={stats.upcoming} />
+        <StatCard title="Tickets Sold" value={stats.totalTickets} />
 
-        <input
-          placeholder="Time"
-          value={time}
-          onChange={(e) => setTime(e.target.value)}
-          className="p-2"
-        />
-
-        <input
-          placeholder="Image URL"
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
-          className="p-2"
-        />
-
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          className="p-2 "
-        >
-          <option value="featured" className="text-black" color="blue">Featured</option>
-          <option value="upcoming" className="text-black">Upcoming</option>
-        </select>
-
-        <button
-          onClick={handleAddShow}
-          className="bg-blue-600 p-2 rounded"
-        >
-          Add Show
-        </button>
       </div>
+    </div>
+  )
+}
+
+function StatCard({ title, value }) {
+  return (
+    <div className="bg-neutral-900 p-6 rounded-2xl shadow-lg border border-neutral-800">
+      <h2 className="text-gray-400 text-sm mb-2">{title}</h2>
+      <p className="text-3xl font-bold">{value}</p>
     </div>
   )
 }

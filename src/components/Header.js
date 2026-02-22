@@ -1,83 +1,96 @@
 import React from 'react'
 import Link from "next/link"
 import { useAuth } from "@/context/AuthContext"
+import { useRouter } from "next/navigation"
 
-export default function Header({ lang, setLang, logged, setShowHistory }) {
-    const { setLogged, user, email} = useAuth();
+export default function Header({ lang, setLang, logged }) {
+    const { user, email} = useAuth();
+      const router = useRouter()
 
     return (
 
 
-        <header className="flex flex-row justify-evenly items-center p-6 sticky space-x-50 bg-black  w-full top-0 z-15 h-30">
-            <div className="flex flex-row items-center space-x-5">
-                <a href="/">
-                    <img src="/logo.png" className="w-20" />
-                </a>
-                {(lang) ? <ul className="flex space-x-6 text-xl">
-                    <li><Link href="#header" className="hover:text-gray-800 transition duration-300 ease-in-out">Featured</Link></li>
-                    <li><Link href="#past-shows" scroll={true} className="hover:text-gray-800 transition duration-300 ease-in-out">Past Shows</Link></li>
-                    <li><Link href="/about-us" className="hover:text-gray-800 transition duration-300 ease-in-out">About Us</Link></li>
-                </ul> : <ul className="flex space-x-6 text-xl">
-                    <li><Link href="#header" className="hover:text-gray-800 transition duration-300 ease-in-out">Онцлох Эвэнтүүд</Link></li>
-                    <li><Link href="#past-shows" scroll={true} className="hover:text-gray-800 transition duration-300 ease-in-out">Дууссан Эвэнтүүд</Link></li>
-                    <li><Link href="/about-us" className="hover:text-gray-800 transition duration-300 ease-in-out">Бидний тухай</Link></li>
+       <header className="w-full sticky top-0 z-50 bg-neutral-900">
+  <div className="flex flex-col lg:flex-row lg:justify-evenly lg:items-center px-4 sm:px-8 py-4 gap-4">
 
-                </ul>}
-            </div>
-            <div className='flex flex-row items-center space-x-12 '>
-                {logged ?
-                    (
+    {/* LEFT SIDE */}
+    <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-8">
 
-                        <div className='flex flex-row space-x-10 items-center'>
-  
-  {/* Show Admin button ONLY for admin */}
-  {email === "admin@gmail.com" && (
-    <Link
-      href="/admin"
-      className="bg-red-600 px-4 py-2 rounded-xl"
-    >
-      Admin
-    </Link>
-  )}
+      <a href="/" className="flex justify-center lg:justify-start">
+        <img src="/logo.png" className="w-16 sm:w-20" />
+      </a>
 
-  <p>Hello, {user}!</p>
+      {(lang) ? (
+        <ul className="flex flex-wrap justify-center lg:justify-start gap-4 sm:gap-6 text-sm sm:text-base lg:text-lg">
+          <li><Link href="#header" className="hover:text-gray-400 transition">Featured</Link></li>
+          <li><Link href="#past-shows" scroll={true} className="hover:text-gray-400 transition">Upcoming Shows</Link></li>
+          <li><Link href="/about-us" className="hover:text-gray-400 transition">About Us</Link></li>
+        </ul>
+      ) : (
+        <ul className="flex flex-wrap justify-center lg:justify-start gap-4 sm:gap-6 text-sm sm:text-base lg:text-lg">
+          <li><Link href="#header" className="hover:text-gray-400 transition">Онцлох Эвэнтүүд</Link></li>
+          <li><Link href="#past-shows" scroll={true} className="hover:text-gray-400 transition">Удахгүй</Link></li>
+          <li><Link href="/about-us" className="hover:text-gray-400 transition">Бидний тухай</Link></li>
+        </ul>
+      )}
 
-  <button
-    onClick={() => setShowHistory(true)}
-    className='hover:text-gray-800 hover:cursor-pointer transition duration-300 ease-in-out outline-2 rounded-4xl w-50 h-12 text-xl text-white flex flex-row items-center justify-center space-x-2 bg-gradient-to-r from-gray-500 to-blue-800'
-  >
-    <p>{lang ? "History" : "Хуулга"}</p>
-  </button>
+    </div>
 
-  <button
-    onClick={() => {
-      setLogged(false);
-      localStorage.removeItem("auth");
-    }}
-  >
-    Logout
-  </button>
+    {/* RIGHT SIDE */}
+    <div className="flex flex-wrap justify-center lg:justify-end items-center gap-4 sm:gap-6">
 
-</div>
-                ) :
+      {logged ? (
+        <div className="flex flex-wrap items-center gap-4 sm:gap-6">
 
-                (lang ?
-                <Link href="/Login" className='hover:text-black hover:cursor-pointer transition duration-300 ease-in-out  outline-2 rounded-4xl w-50 h-12 text-xl text-white items-center justify-center flex flex-row '>
-                    <p>Login / Sign Up</p>
-                </Link> :
-                <Link href="/Login" className='hover:text-black hover:cursor-pointer transition duration-300 ease-in-out  outline-2 rounded-4xl w-58 h-12 text-xl text-white items-center justify-center flex flex-row '>
-                    <p>Нэвтрэх / Бүртгүүлэх</p>
-                </Link>)}
+          {email === "admin@gmail.com" && (
+            <Link
+              href="/admin"
+              className="bg-red-600 px-3 py-2 text-sm sm:text-base rounded-xl"
+            >
+              Admin
+            </Link>
+          )}
 
-                <div onClick={() => setLang(!lang)} className='hover:text-black hover:cursor-pointer transition duration-300 ease-in-out bg-gray-500 rounded-4xl w-25 h-12 text-xl text-white flex flex-row items-center justify-center group relative space-x-1.5'>
-                    <div className='group relative '>
-                        <img src="/whiteg.png" className="w-8" />
-                        <img src="/blackg.png" className="absolute inset-0 w-30 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out" />
-                    </div>
-                    {(lang) ? <p>EN</p> : <p >MN</p>}
-                </div>
-            </div>
 
-        </header>
+
+      <div
+        onClick={() => router.push("/profile")}
+        className="flex items-center gap-2 px-4 py-2 bg-gray-600 rounded-full cursor-pointer hover:bg-gray-500 transition"
+      >
+        <img src="/user.png" className="w-6 sm:w-7" />
+        <p className="text-sm sm:text-base">{user}</p>
+      </div>
+        </div>
+      ) : (
+        lang ? (
+          <Link
+            href="/Login"
+            className="px-4 sm:px-6 py-2 text-sm sm:text-base rounded-full border border-white"
+          >
+            Login / Sign Up
+          </Link>
+        ) : (
+          <Link
+            href="/Login"
+            className="px-4 sm:px-6 py-2 text-sm sm:text-base rounded-full border border-white"
+          >
+            Нэвтрэх / Бүртгүүлэх
+          </Link>
+        )
+      )}
+
+      {/* Language Toggle */}
+      <div
+        onClick={() => setLang(!lang)}
+        className="flex items-center gap-2 px-4 py-2 bg-gray-600 rounded-full cursor-pointer hover:bg-gray-500 transition"
+      >
+        <img src="/whiteg.png" className="w-5 sm:w-6" />
+        <p className="text-sm sm:text-base">{lang ? "EN" : "MN"}</p>
+      </div>
+
+    </div>
+  </div>
+</header>
+
     )
 }

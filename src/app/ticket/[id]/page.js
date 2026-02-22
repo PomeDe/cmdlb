@@ -32,26 +32,25 @@ useEffect(() => {
 }, [id, allShows]);
 
 
-
   return (
     <div className=" flex flex-col items-center justify-center bg-black font-sans  text-white">
       <Header lang={lang} setLang={setLang} logged={logged} />
-      <div id="header" className=" overflow-hidden  flex h-250 w-full items-start justify-center">
-        {ticket !== null ? (<div className="w-2/3 h-150 bg-gray-400 rounded-3xl flex flex-row mt-30 ">
+      <div id="header" className=" overflow-hidden  flex w-full items-start justify-center">
+        {ticket !== null ? (<div className="w-2/3  bg-gray-400 rounded-3xl flex flex-row mt-30 ">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 p-8">
-              <div className=" rounded-lg overflow-hidden">
+              <div className=" rounded-lg">
                 <img
                   src={ticket.src}
                   className="w-full h-full object-cover"
                 />
               </div>
 
-              <div className="flex flex-col justify-between">
+              <div className="flex flex-col justify-between  lg:w-xl">
                 <div>
-                  <h1 className="text-5xl mb-6">{ticket.name}</h1>
+                  <h1 className="text-5xl mb-6 ">{ticket.name}</h1>
 
 
-                  <div className="space-y-4 mb-8">
+                  <div className="space-y-4  mb-8">
                     <div className="bg-white rounded-xl p-4 flex items-center gap-4">
                       <div className="bg-[#44a0eb] rounded-xl p-3">
                         <img src="/date.png" className="h-6 w-6 text-black" />

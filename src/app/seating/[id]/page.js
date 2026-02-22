@@ -7,33 +7,42 @@ import { saveTicket } from "@/components/ticketStorage";
 import { useState, useEffect } from 'react';
 import { useParams,useRouter } from "next/navigation";
 import showsData from "@/data/shows.json";
+import { getTickets } from "@/components/ticketStorage";
 
 
 const ROWS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 const SEATS_PER_ROW = 12;
-const TAKEN_SEATS = new Set([
-  'C5', 'C6',
-  'D7', 'D8',
-  'E5', 'E6', 'E7',
-  'F4', 'F5', 'F6',
-]);
 
-function generateSeats() {
-  const seats = [];
+
+function generateSeats(showId) {
+  const seats = []
+
+  const savedTakenSeats =
+    JSON.parse(localStorage.getItem(`taken_seats_${showId}`)) || []
+
+  const takenSet = new Set(savedTakenSeats)
 
   ROWS.forEach((row) => {
     for (let num = 1; num <= SEATS_PER_ROW; num++) {
-      const id = `${row}${num}`;
+      const id = `${row}${num}`
+
       seats.push({
         id,
         row,
         number: num,
-        status: TAKEN_SEATS.has(id) ? 'taken' : 'available',
-      });
+        status: takenSet.has(id) ? "taken" : "available",
+      })
     }
-  });
+  })
 
   return seats;
+}
+function markSeatsAsTaken(showId, seats) {
+  const key = `taken_seats_${showId}`
+  const existing = JSON.parse(localStorage.getItem(key)) || []
+
+  const updated = [...new Set([...existing, ...seats])]
+  localStorage.setItem(key, JSON.stringify(updated))
 }
 
 export default function Home() {
@@ -43,11 +52,12 @@ export default function Home() {
   const router = useRouter();
 
   const [show, setShow] = useState(null);
-  const [seats, setSeats] = useState(generateSeats());
+  const [seats, setSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [showPayment, setShowPayment] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState('qpay');
   const [allShows, setAllShows] = useState([])
+
 
 useEffect(() => {
   const adminShows = JSON.parse(localStorage.getItem("admin_shows")) || []
@@ -65,6 +75,13 @@ useEffect(() => {
 
   setShow(selectedShow || null);
 }, [id, allShows]);
+    useEffect(() => {
+  if (!show) return;
+
+  const generated = generateSeats(show.id);
+  setSeats(generated);
+  setSelectedSeats([]);
+}, [show]);
 
   const handleSeatClick = (seatId) => {
     const seat = seats.find((s) => s.id === seatId);
@@ -114,6 +131,7 @@ useEffect(() => {
 
     // Save ticket by email
     saveTicket(ticketData, email);
+    markSeatsAsTaken(show.id, selectedSeats)
     router.push("/");
   };
 
@@ -142,25 +160,37 @@ useEffect(() => {
           </h1>
 
           {ROWS.map((row) => (
-            <div key={row} className="flex items-center gap-2 mb-3">
-              <div className="w-8 text-center font-bold text-lg">{row}</div>
+  <div
+    key={row}
+    className="flex items-start sm:items-center gap-2 mb-4"
+  >
+    {/* Row Label */}
+    <div className="w-6 sm:w-8 text-center font-bold text-sm sm:text-lg">
+      {row}
+    </div>
 
-              <div className="flex gap-2">
-                {seats
-                  .filter((s) => s.row === row)
-                  .map((seat) => (
-                    <button
-                      key={seat.id}
-                      onClick={() => handleSeatClick(seat.id)}
-                      disabled={seat.status === 'taken'}
-                      className={`w-10 h-10 rounded transition-all duration-200 ${getSeatColor(seat.status)}`}
-                    >
-                      <span className="text-xs font-semibold">{seat.number}</span>
-                    </button>
-                  ))}
-              </div>
-            </div>
-          ))}
+    {/* Seats Container */}
+    <div className="flex gap-1 sm:gap-2 flex-wrap ">
+      {seats?.filter((s) => s.row === row).map((seat) => (
+          <button
+            key={seat.id}
+            onClick={() => handleSeatClick(seat.id)}
+            disabled={seat.status === "taken"}
+            className={`
+              w-8 h-8 sm:w-10 sm:h-10 
+              rounded 
+              transition-all duration-200 
+              text-[10px] sm:text-xs 
+              font-semibold 
+              ${getSeatColor(seat.status)}
+            `}
+          >
+            {seat.number}
+          </button>
+        ))}
+    </div>
+  </div>
+))}
 
           <div className="bg-white text-black rounded-lg p-6 w-2/3 max-w-md shadow-xl mt-8">
             <p className="mb-3 text-lg">
@@ -349,6 +379,7 @@ useEffect(() => {
       </div>
     )}
 
+    
       <Footer lang={lang} />
     </div>
   );

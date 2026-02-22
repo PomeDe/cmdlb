@@ -1,18 +1,46 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import Header from "@/components/Header"
-import Footer from "@/components/Footer"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { useAuth } from "@/context/AuthContext"
+import Link from "next/link";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
-export default function Home() {
-  const [lang, setLang] = useState(true)
-  const router = useRouter()
-    const { setLogged,setUser,setEmail } = useAuth()
-  const [email, setEmai] = useState("")
-  const [name, setName] = useState("")
+export default function Signup() {
+  const [lang, setLang] = useState(true);
+  const router = useRouter();
+  const { setLogged, setUser, setEmail, users, setUsers } = useAuth();
+
+  const [email, setEmai] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleSignup = (e) => {
+    e.preventDefault();
+
+    if (password !== confirmPassword) {
+      alert(lang ? "Passwords do not match!" : "Нууц үг таарахгүй байна!");
+      return;
+    }
+
+    // Check if email already exists
+    const existingUser = users.find((u) => u.email === email);
+    if (existingUser) {
+      alert(lang ? "User already exists!" : "Хэрэглэгч аль хэдийн бүртгэгдсэн байна!");
+      return;
+    }
+
+    // Add new user
+    const newUser = { email, name, password }; // demo: passwords stored in plain text (not secure)
+    setUsers([...users, newUser])
+    setLogged(true);
+    setEmail(email);
+    setUser(name);
+
+    router.push("/"); // redirect to home/login page
+  };
 
   return (
     <div className="flex flex-col items-center justify-center font-sans bg-black text-white">
@@ -28,13 +56,7 @@ export default function Home() {
 
           <form
             className="w-full flex flex-col h-160 justify-evenly items-center"
-            onSubmit={(e) => {
-              e.preventDefault()
-                setLogged(true)
-                setEmail(email)
-                setUser(name)
-              router.push("/") 
-            }}
+            onSubmit={handleSignup}
           >
             <div className="flex flex-col items-start text-xl w-2/3">
               <p className="text-2xl">{lang ? "Email *" : "Имэйл *"}</p>
@@ -42,7 +64,7 @@ export default function Home() {
                 type="email"
                 required
                 className="bg-white w-full h-14 rounded-xl text-black"
-                                onChange={(e) =>(setEmai(e.target.value))}
+                onChange={(e) => setEmai(e.target.value)}
               />
             </div>
 
@@ -52,7 +74,7 @@ export default function Home() {
                 type="text"
                 required
                 className="bg-white w-full h-14 rounded-xl text-black"
-                                                onChange={(e) =>(setName(e.target.value))}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
 
@@ -64,6 +86,7 @@ export default function Home() {
                 minLength={8}
                 maxLength={8}
                 className="bg-white w-full h-14 rounded-xl text-black"
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
@@ -75,6 +98,7 @@ export default function Home() {
                 minLength={8}
                 maxLength={8}
                 className="bg-white w-full h-14 rounded-xl text-black"
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
 
@@ -97,6 +121,5 @@ export default function Home() {
 
       <Footer lang={lang} />
     </div>
-  )
+  );
 }
-

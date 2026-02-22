@@ -10,8 +10,26 @@ import { useAuth } from "@/context/AuthContext"
 export default function Home() {
   const [lang, setLang] = useState(true)
   const router = useRouter()
-    const { setLogged,setEmail } = useAuth()
+  const { setLogged, setEmail,setUser, users} = useAuth()
   const [email, setEmai] = useState("")
+  const [password, setPassword] = useState("")
+
+  const handleLogin = (e) => {
+    e.preventDefault()
+
+    const user = users.find(
+      (u) => u.email === email && u.password === password
+    )
+
+    if (user) {
+      setLogged(true)
+      setEmail(email)
+            setUser(user.name);
+      router.back()
+    } else {
+      alert(lang ? "User not found or wrong password" : "Хэрэглэгч олдсонгүй эсвэл нууц үг буруу")
+    }
+  }
 
   return (
     <div className="flex flex-col items-center justify-center font-sans bg-black text-white">
@@ -27,12 +45,7 @@ export default function Home() {
 
           <form
             className="w-full flex flex-col h-100 justify-evenly items-center"
-            onSubmit={(e) => {
-              e.preventDefault()
-                setLogged(true)
-                setEmail(email)
-              router.back()
-            }}
+            onSubmit={handleLogin}
           >
             <div className="flex flex-col items-start text-xl w-2/3">
               <p className="text-2xl">{lang ? "Email *" : "Имэйл *"}</p>
@@ -41,7 +54,7 @@ export default function Home() {
                 id="email"
                 required
                 className="bg-white w-full h-14 rounded-xl text-black"
-                onChange={(e) =>(setEmai(e.target.value))}
+                onChange={(e) => setEmai(e.target.value)}
               />
             </div>
 
@@ -53,6 +66,7 @@ export default function Home() {
                 minLength={8}
                 maxLength={8}
                 className="bg-white w-full h-14 rounded-xl text-black"
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 

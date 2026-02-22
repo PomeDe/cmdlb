@@ -3,18 +3,27 @@
 import Link from "next/link"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
+import { getTickets } from "@/components/ticketStorage";
+import PurchaseHistory from "@/components/Purcha"
 
 const ROWS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 const SEATS_PER_ROW = 12;
 
 export default function Home() {
   const [lang, setLang]= useState(true);
-  const { logged } = useAuth();
+  const { logged, setShowHistory, showHistory, email } = useAuth();
+      const [tickets, setTickets] = useState([])
+      useEffect(() => {
+        if (!email) return; // prevent errors if no one is logged in
+      
+        const userTickets = getTickets(email); 
+        setTickets(userTickets);
+      }, [email, showHistory]);
   return (
     <div className=" flex flex-col items-center justify-center bg-black font-sans  text-white">
-      <Header lang={lang} setLang={setLang} logged={logged}/>
+      <Header lang={lang} setLang={setLang} logged={logged}  setShowHistory={setShowHistory}/>
        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Hero Section */}
       <div className="text-center mb-16">
@@ -142,6 +151,11 @@ export default function Home() {
         </div>
       </div>
     </div>
+            <PurchaseHistory
+            open={showHistory}
+            onClose={() => setShowHistory(false)}
+            tickets={tickets}
+          />
       <Footer lang={lang} />
     </div>
   )
