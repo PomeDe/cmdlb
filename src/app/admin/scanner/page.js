@@ -10,15 +10,22 @@ export default function ScannerPage() {
 
     const startScanner = async () => {
       const cameras = await Html5Qrcode.getCameras();
+
       if (cameras && cameras.length) {
+        // Try to select the back camera
+        let backCamera = cameras.find(cam => /back|rear|environment/i.test(cam.label));
+        if (!backCamera) backCamera = cameras[0]; // fallback to first camera
+
         await qrCodeScanner.start(
-          cameras[0].id,
+          backCamera.id,
           { fps: 10, qrbox: 250 },
           (decodedText) => {
             verifyTicket(decodedText);
             qrCodeScanner.stop();
           }
         );
+      } else {
+        alert("No camera found on this device.");
       }
     };
 
@@ -49,6 +56,15 @@ export default function ScannerPage() {
 
     alert("✅ Ticket Valid - Entry Allowed");
   }
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
+      <h1 className="text-3xl mb-6">Scan Ticket</h1>
+      <div id="reader" className="w-96 sm:w-80"></div>
+    </div>
+  );
+}
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
