@@ -1,37 +1,75 @@
-import React from 'react'
+export default function Footer({ lang }) {
+  return (
+    <footer className="bg-neutral-950 border-t border-white/10 text-gray-400 w-full">
+      <div className="max-w-6xl mx-auto px-6 py-16">
 
-export default function Footer({lang}) {
-    return (
-        <footer className='bg-neutral-900 p-6 text-center text-gray-400 mt-10   top-[100vh] w-full'>
-            <div className='flex flex-row justify-evenly items-center'>
-                                <p className='w-1/4'>@2025 Copyright</p>
-                <div className='flex flex-row w-2/3 justify-around'>
-                    <div className='flex flex-col text-left space-y-3'  >
-                    {
-(lang)?<p className='text-2xl text-white font-semibold '>Contact</p> : <p className='text-2xl text-white font-semibold '>Холбоо барих</p>
-}
-                    <p className='text-lg '>+976 69963388 </p>
-                    <div className='flex flex-row items-center space-x-3'>
-                        <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/500px-Facebook_Logo_%282019%29.png' className='w-5 h-5' />
-                        <p>@Comedy Lab</p>
-                    </div>
-                    <div className='flex flex-row items-center space-x-3'>
-                        <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/500px-Instagram_icon.png' className='w-5 h-5' />
-                        <p>@comedylaboratory</p>
-                    </div>
-                    <div className='flex flex-row items-center space-x-3'>
-                        <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Gmail_icon_%282020%29.svg/330px-Gmail_icon_%282020%29.svg.png' className='w-5 h-4' />
-                        <p>comedylabmn@gmail.com</p>
-                    </div>
-                </div>
-                <div className='flex flex-col text-left space-y-3 w-80'  >
-                    {(lang)?<p className='text-2xl text-white font-semibold'>Address</p> : <p className='text-2xl text-white font-semibold'>Хаяг</p>}
-                    <p className='text-lg w-full'>LIBERTY PUB, Чингисийн өргөн чөлөө, Тэмээтэй хөшөөний хойно, Их хуралдай төвийн 1 давхарт Ulaanbaatar, Mongolia</p>
-                    
-                </div>
-                </div>
+        {/* TOP SECTION */}
+        <div className="grid md:grid-cols-3 grid-cols-2 gap-12">
 
+          {/* BRAND */}
+          <div className="space-y-4">
+            <img src="/logo.png" className="w-20 opacity-90" />
+            <p className="text-sm text-gray-500 leading-relaxed">
+              {lang
+                ? "Mongolia’s premier stand-up comedy platform bringing unforgettable live performances."
+                : "Монголын шилдэг stand-up comedy платформ."}
+            </p>
+          </div>
+
+          {/* CONTACT */}
+          <div className="space-y-4">
+            <h3 className="text-white font-semibold text-lg">
+              {lang ? "Contact" : "Холбоо барих"}
+            </h3>
+
+            <p className="text-sm">+976 69963388</p>
+
+            <div className="space-y-2 text-sm">
+              <p className="hover:text-white transition cursor-pointer">
+                Facebook • @ComedyLab
+              </p>
+              <p className="hover:text-white transition cursor-pointer">
+                Instagram • @comedylaboratory
+              </p>
+              <p className="hover:text-white transition cursor-pointer">
+                comedylabmn@gmail.com
+              </p>
             </div>
-        </footer>
-    )
+          </div>
+
+          {/* ADDRESS */}
+          <div className="space-y-4">
+            <h3 className="text-white font-semibold text-lg">
+              {lang ? "Location" : "Хаяг"}
+            </h3>
+
+            <p className="text-sm leading-relaxed text-gray-500">
+              LIBERTY PUB<br />
+              Чингисийн өргөн чөлөө<br />
+              Их хуралдай төвийн 1 давхарт<br />
+              Ulaanbaatar, Mongolia
+            </p>
+          </div>
+
+        </div>
+
+        {/* DIVIDER */}
+        <div className="border-t border-white/10 mt-12 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+
+          <p>© 2025 Comedy Lab. All rights reserved.</p>
+
+          <div className="flex gap-6 mt-4 md:mt-0">
+            <p className="hover:text-white transition cursor-pointer">
+              {lang ? "Privacy Policy" : "Нууцлал"}
+            </p>
+            <p className="hover:text-white transition cursor-pointer">
+              {lang ? "Terms" : "Үйлчилгээний нөхцөл"}
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </footer>
+  )
 }

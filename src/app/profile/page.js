@@ -104,10 +104,6 @@ export default function ProfilePage() {
                     {ticket.date} | {ticket.time}
                   </p>
 
-                  <p className="text-gray-300 mt-2">
-                    Seats: {ticket.seats.join(", ")}
-                  </p>
-
                   <p className="text-red-500 font-bold mt-4">
                     {ticket.total.toLocaleString()}₮
                   </p>

@@ -11,26 +11,6 @@
   },
   {
     "id": 1,
-    "src": "/1.jpg",
-        
-    "name":"Darhand Neg Udaa",
-    "price":"25000",
-    "location":"Huslen tuv, 5 davhar, Gerelt Restaurant, lounge",
-        "date":"Nov 22",
-    "time": "21:00",
-        "type":"featured"
-  },
-  {
-    "id": 2,
-    "src": "/2.jpg",
-        "name":"Saturday Comedy Show",
-    "price":"25000",
-    "location":"Ikh Khuraldai centre, 1st floor, Liberty Pub",
-        "date":"Oct 25",
-    "time": "20:30",
-        "type":"featured"
-  }   ,{
-    "id": 3,
     "src": "/0.jpg",
     "name":"Saturday Comedy Night",
     "price":"25000",
@@ -40,7 +20,7 @@
         "type":"upcoming"
   },
   {
-    "id": 4,
+    "id": 2,
     "src": "/1.jpg",
         
     "name":"Darhand Neg Udaa",
@@ -51,7 +31,7 @@
             "type":"upcoming"
   },
   {
-    "id": 5,
+    "id": 3,
     "src": "/2.jpg",
         "name":"Saturday Comedy Show",
     "price":"25000",
@@ -60,7 +40,7 @@
     "time": "20:30",
             "type":"upcoming"
   },    
-  {"id": 6,
+  {"id": 4,
     "src": "/1.jpg",
         
     "name":"Darhand Neg Udaa",
@@ -69,6 +49,15 @@
         "date":"Nov 22",
     "time": "21:00",
             "type":"upcoming"
+  },
+    {"id": 5,
+    "src": "/1.jpg",
+        
+    "name":"Darhand Neg Udaa",
+    "price":"25000",
+    "location":"Huslen tuv, 5 davhar, Gerelt Restaurant, lounge",
+        "date":"Nov 22",
+    "time": "21:00",
+            "type":"featured"
   }
-  
 ]

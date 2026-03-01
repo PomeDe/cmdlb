@@ -36,67 +36,92 @@ useEffect(() => {
     <div className=" flex flex-col items-center justify-center bg-black font-sans  text-white">
       <Header lang={lang} setLang={setLang} logged={logged} />
       <div id="header" className=" overflow-hidden  flex w-full items-start justify-center">
-        {ticket !== null ? (<div className="w-2/3  bg-gray-400 rounded-3xl flex flex-row mt-30 ">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 p-8">
-              <div className=" rounded-lg">
-                <img
-                  src={ticket.src}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+        {ticket !== null ? (
+  <div className="w-full max-w-6xl px-6 py-24">
+    
+    <div className="grid lg:grid-cols-2 gap-16 items-start">
 
-              <div className="flex flex-col justify-between  lg:w-xl">
-                <div>
-                  <h1 className="text-5xl mb-6 ">{ticket.name}</h1>
+      {/* LEFT SIDE - IMAGE */}
+      <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+        <img
+          src={ticket.src}
+          className="w-full h-[500px] object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+      </div>
 
+      {/* RIGHT SIDE - DETAILS */}
+      <div className="flex flex-col justify-between space-y-10">
 
-                  <div className="space-y-4  mb-8">
-                    <div className="bg-white rounded-xl p-4 flex items-center gap-4">
-                      <div className="bg-[#44a0eb] rounded-xl p-3">
-                        <img src="/date.png" className="h-6 w-6 text-black" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-[#717171]">Date and Time</p>
-                        <p className="text-lg text-neutral-800">{ticket.date} at {ticket.time}</p>
-                      </div>
-                    </div>
+        {/* TITLE */}
+        <div>
+          <h1 className="text-5xl font-bold mb-4">{ticket.name}</h1>
+          <p className="text-gray-400 text-lg">
+            {lang ? "Live Stand-Up Comedy Experience" : "Live Stand-Up тоглолт"}
+          </p>
+        </div>
 
-                    <div className="bg-white rounded-xl p-4 flex items-center gap-4">
-                      <div className="bg-[#44a0eb] rounded-xl p-3">
-                        <img src="/loc.png" className="h-6 w-6 text-black" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-[#717171]">Location</p>
-                        <p className="text-lg text-neutral-800">{ticket.location}</p>
-                      </div>
-                    </div>
+        {/* INFO CARDS */}
+        <div className="space-y-6">
 
-                    <div className="bg-white rounded-xl p-4 flex items-center gap-4">
-                      <div className="bg-[#44a0eb] rounded-xl p-3">
-                        <img src="/price.png " className="h-6 w-6 text-black" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-[#717171]">Price</p>
-                        <p className="text-lg text-neutral-800">{ticket.price}₮</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <button
-onClick={() => {
-  logged
-    ? (window.location.href = `/seating/${ticket.id}`)
-    : (window.location.href = "/Login")
-}}
-                  className="w-full h-20 bg-linear-to-b from-red-900 to-red-500 rounded-xl text-2xl"
-                >
-                  Choose Seat
-                </button>
-              </div>
+          <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6 flex justify-between items-center">
+            <div>
+              <p className="text-gray-400 text-sm">
+                {lang ? "Date & Time" : "Огноо"}
+              </p>
+              <p className="text-xl font-semibold">
+                {ticket.date} • {ticket.time}
+              </p>
             </div>
-          
-        </div>) : (<p>Couldnt find ticket</p>)}
+          </div>
+
+          <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6 flex justify-between items-center">
+            <div>
+              <p className="text-gray-400 text-sm">
+                {lang ? "Location" : "Байршил"}
+              </p>
+              <p className="text-xl font-semibold">
+                {ticket.location}
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6 flex justify-between items-center">
+            <div>
+              <p className="text-gray-400 text-sm">
+                {lang ? "Ticket Price" : "Үнэ"}
+              </p>
+              <p className="text-2xl font-bold text-red-500">
+                {ticket.price}₮
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        {/* BUTTON */}
+        <button
+          onClick={() => {
+            logged
+              ? (window.location.href = `/purchase/${ticket.id}`)
+              : (window.location.href = "/Login")
+          }}
+          className="w-full h-16 bg-red-600 hover:bg-red-500 rounded-2xl text-xl font-semibold transition duration-200 shadow-lg hover:shadow-red-500/30"
+        >
+          {lang ? "Purchase Ticket" : "Тасалбар худалдаж авах"}
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+) : (
+  <div className="py-40 text-gray-500 text-xl">
+    {lang ? "Ticket not found." : "Тоглолт олдсонгүй."}
+  </div>
+)}
+
       </div>
       <Footer lang={lang} />
     </div>

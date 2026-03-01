@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import { useState } from "react"
@@ -10,91 +9,141 @@ import { useAuth } from "@/context/AuthContext"
 export default function Home() {
   const [lang, setLang] = useState(true)
   const router = useRouter()
-  const { setLogged, setEmail,setUser, users} = useAuth()
-  const [email, setEmai] = useState("")
-  const [password, setPassword] = useState("")
 
-  const handleLogin = (e) => {
+  const { setLogged, setEmail, setUser } = useAuth()
+
+  const [email, setEmailInput] = useState("")
+  const [serverCode, setServerCode] = useState("")
+  const [enteredCode, setEnteredCode] = useState("")
+  const [step, setStep] = useState(1)
+
+  // Send verification code
+  const sendCode = async (e) => {
     e.preventDefault()
-
-    const user = users.find(
-      (u) => u.email === email && u.password === password
-    )
-
-    if (user) {
+    if(email == "admin@gmail.com"){
       setLogged(true)
       setEmail(email)
-            setUser(user.name);
+      setUser(email.split("@")[0])
+      router.back()
+    }
+    else{
+const res = await fetch("/api/send-code", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    })
+
+    const data = await res.json()
+
+    if (data.success) {
+      setServerCode(data.code) // ⚠️ testing only
+      setStep(2)
+      alert("Verification code sent!")
+    }
+    }
+    
+  }
+
+  // Verify and login
+  const verifyCode = (e) => {
+    e.preventDefault()
+
+    if (enteredCode === serverCode) {
+      setLogged(true)
+      setEmail(email)
+      setUser(email.split("@")[0]) // auto username
+
       router.back()
     } else {
-      alert(lang ? "User not found or wrong password" : "Хэрэглэгч олдсонгүй эсвэл нууц үг буруу")
+      alert("Invalid code")
     }
   }
 
   return (
-    <div className="flex flex-col items-center justify-center font-sans bg-black text-white">
-      <Header lang={lang} setLang={setLang} />
+  <div className="min-h-screen flex flex-col bg-gradient-to-b from-black via-neutral-900 to-black text-white">
+    <Header lang={lang} setLang={setLang} />
 
-      <div className="flex flex-col overflow-hidden h-300 w-full items-center -space-y-15">
-        <img src="logo.png" className="w-40 z-10" />
+    {/* CENTER AREA */}
+    <div className="flex flex-1 items-center justify-center px-5 lg:py-48 py-14">
+      <div className="w-full max-w-md bg-neutral-900/80 backdrop-blur-xl p-10 rounded-3xl shadow-2xl border border-white/10">
 
-        <div className="h-150 bg-gray-700 w-2/5 flex flex-col items-center rounded-xl">
-          <p className="text-4xl mt-15 font-semibold">
-            {lang ? "Log in" : "Нэвтрэх"}
-          </p>
+        {/* LOGO */}
+        <div className="flex justify-center mb-8">
+          <img src="/logo.png" className="w-24 opacity-90" />
+        </div>
 
-          <form
-            className="w-full flex flex-col h-100 justify-evenly items-center"
-            onSubmit={handleLogin}
-          >
-            <div className="flex flex-col items-start text-xl w-2/3">
-              <p className="text-2xl">{lang ? "Email *" : "Имэйл *"}</p>
+        {/* TITLE */}
+        <h2 className="text-3xl font-bold text-center mb-8">
+          {lang ? "Welcome Back" : "Тавтай морил"}
+        </h2>
+
+        {/* STEP 1 */}
+        {step === 1 && (
+          <form onSubmit={sendCode} className="space-y-6">
+
+            <div className="space-y-2">
+              <label className="text-sm text-gray-400">
+                {lang ? "Email Address" : "Имэйл хаяг"}
+              </label>
               <input
                 type="email"
-                id="email"
                 required
-                className="bg-white w-full h-14 rounded-xl text-black"
-                onChange={(e) => setEmai(e.target.value)}
-              />
-            </div>
-
-            <div className="flex flex-col items-start text-xl w-2/3">
-              <p className="text-2xl">{lang ? "Password *" : "Нууц үг *"}</p>
-              <input
-                type="password"
-                required
-                minLength={8}
-                maxLength={8}
-                className="bg-white w-full h-14 rounded-xl text-black"
-                onChange={(e) => setPassword(e.target.value)}
+                placeholder="you@example.com"
+                className="w-full h-12 bg-neutral-800 border border-white/10 rounded-xl px-4 focus:outline-none focus:ring-2 focus:ring-red-600 transition"
+                onChange={(e) => setEmailInput(e.target.value)}
               />
             </div>
 
             <button
               type="submit"
-              className="w-2/3 bg-linear-to-b from-red-900 to-red-500 flex justify-center items-center h-16 rounded-xl text-2xl"
+              className="w-full h-12 bg-red-600 hover:bg-red-500 rounded-xl font-semibold transition duration-200"
             >
-              {lang ? "Log in" : "Нэвтрэх"}
+              {lang ? "Send Verification Code" : "Код илгээх"}
             </button>
+
           </form>
+        )}
 
-          <div className="flex flex-row space-x-2 text-lg mt-4">
-            <p>{lang ? "Forgot Your Password?" : "Нууц үгээ мартсан уу?"}</p>
-            <Link href="/" className="underline text-red-500">
-              {lang ? "Reset Your Password" : "Нууц үгээ солих"}
-            </Link>
-          </div>
+        {/* STEP 2 */}
+        {step === 2 && (
+          <form onSubmit={verifyCode} className="space-y-6">
 
-          <div className="flex flex-row space-x-2 text-lg">
-            <p>{lang ? "Don't have an account?" : "Бүртгэлтэй юу?"}</p>
-            <Link href="/Signup" className="underline text-red-500">
-              {lang ? "Sign Up" : "Бүртгүүлэх"}
-            </Link>
-          </div>
-        </div>
+            <div className="space-y-2">
+              <label className="text-sm text-gray-400">
+                {lang ? "Enter Verification Code" : "Баталгаажуулах код"}
+              </label>
+              <input
+                type="text"
+                required
+                placeholder="123456"
+                className="w-full h-12 bg-neutral-800 border border-white/10 rounded-xl px-4 text-center tracking-widest text-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+                onChange={(e) => setEnteredCode(e.target.value)}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full h-12 bg-green-600 hover:bg-green-500 rounded-xl font-semibold transition duration-200"
+            >
+              {lang ? "Verify & Login" : "Баталгаажуулах"}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setStep(1)}
+              className="w-full text-sm text-gray-400 hover:text-white transition"
+            >
+              {lang ? "Change email" : "Имэйл өөрчлөх"}
+            </button>
+
+          </form>
+        )}
+
       </div>
-
-      <Footer lang={lang} />
     </div>
-  )
+
+    <Footer lang={lang} />
+  </div>
+)
+
 }
