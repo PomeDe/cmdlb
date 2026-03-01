@@ -9,7 +9,7 @@ export async function POST(req) {
     service: "gmail",
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS, // Gmail App Password
+      pass: process.env.EMAIL_PASS, // App Password
     },
   });
 
@@ -27,6 +27,7 @@ export async function POST(req) {
 
     return Response.json({ success: true, code });
   } catch (error) {
-    return Response.json({ success: false });
+    console.error("Email send error:", error);
+    return Response.json({ success: false, error: error.message });
   }
 }
