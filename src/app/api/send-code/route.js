@@ -24,6 +24,8 @@ export async function POST(req) {
         <p>This code will expire in 5 minutes.</p>
       `,
     });
+console.log("Sending code to:", email);
+console.log("Code:", code);
 
     return Response.json({ success: true, code });
   } catch (error) {

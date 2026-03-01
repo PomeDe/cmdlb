@@ -1,25 +1,33 @@
 "use client"
 
-import { useState } from "react";
+import { useEffect } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 
 export default function ScannerPage() {
 
-  const [message, setMessage] = useState("");
+  useEffect(() => {
+    const qrCodeScanner = new Html5Qrcode("reader");
 
-  const handleImageScan = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const startScanner = async () => {
+      const cameras = await Html5Qrcode.getCameras();
+      if (cameras && cameras.length) {
+        await qrCodeScanner.start(
+          cameras[0].id,
+          { fps: 10, qrbox: 250 },
+          (decodedText) => {
+            verifyTicket(decodedText);
+            qrCodeScanner.stop();
+          }
+        );
+      }
+    };
 
-    const html5QrCode = new Html5Qrcode("reader");
+    startScanner();
 
-    try {
-      const decodedText = await html5QrCode.scanFile(file, true);
-      verifyTicket(decodedText);
-    } catch (err) {
-      setMessage("❌ Could not read QR");
-    }
-  };
+    return () => {
+      qrCodeScanner.stop().catch(() => {});
+    };
+  }, []);
 
   function verifyTicket(code) {
     const tickets = JSON.parse(localStorage.getItem("issuedTickets")) || [];
@@ -27,35 +35,25 @@ export default function ScannerPage() {
     const ticket = tickets.find(t => t.code === code);
 
     if (!ticket) {
-      setMessage("❌ Invalid Ticket");
+      alert("❌ Invalid Ticket");
       return;
     }
 
     if (ticket.used) {
-      setMessage("⚠️ Ticket Already Used");
+      alert("⚠️ Ticket Already Used");
       return;
     }
 
     ticket.used = true;
     localStorage.setItem("issuedTickets", JSON.stringify(tickets));
 
-    setMessage("✅ Ticket Valid - Entry Allowed");
+    alert("✅ Ticket Valid - Entry Allowed");
   }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
       <h1 className="text-3xl mb-6">Scan Ticket</h1>
-
-      <input 
-        type="file" 
-        accept="image/*"
-        onChange={handleImageScan}
-        className="mb-4"
-      />
-
-      <div id="reader" className="hidden"></div>
-
-      <p className="text-2xl mt-4">{message}</p>
+      <div id="reader" className="w-96"></div>
     </div>
   );
 }
