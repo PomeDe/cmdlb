@@ -65,11 +65,3 @@ export default function ScannerPage() {
   );
 }
 
-
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
-      <h1 className="text-3xl mb-6">Scan Ticket</h1>
-      <div id="reader" className="w-96"></div>
-    </div>
-  );
-}
